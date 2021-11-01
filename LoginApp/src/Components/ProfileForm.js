@@ -23,13 +23,13 @@ export default class ProfileForm extends React.Component {
         ? moment(this.props.myProfile.date)
         : moment(),
       focused: false,
-      image: this.props.myProfile.image ? this.props.myProfile.image : null,
+      image: this.props.myProfile.image ? this.props.myProfile.image : "",
       frontIdCard: this.props.myProfile.frontIdCard
         ? this.props.myProfile.frontIdCard
-        : null,
+        : "",
       backIdCard: this.props.myProfile.backIdCard
         ? this.props.myProfile.backIdCard
-        : null,
+        : "",
       base64ImageString: [],
     };
 
@@ -167,7 +167,7 @@ export default class ProfileForm extends React.Component {
                     required={true}
                   />
                 </div>
-                
+
                 <div className="form-group">
                   <label className="form-label card-title">Your Image</label>
                   <div className="input-group">
