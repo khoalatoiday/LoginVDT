@@ -1,0 +1,12 @@
+// babel file config ~ phục vụ cho set up babel cho webpack
+{
+    "presets": [
+        "@babel/preset-react",
+        "@babel/preset-env"
+        
+        
+    ],
+    "plugins": ["transform-class-properties"]
+}
+
+//"es2015", "stage-0"
