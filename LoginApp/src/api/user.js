@@ -24,13 +24,22 @@ const editProfile = (data,token) => {
 
 const updloadProfile = (data,token) => {
   index.setToken(token)
-  
   return api.post("/profile/me/image",data)
 }
 
 const logout = (token) =>{
   index.setToken(token)
-  return api.post("/users/logout")
+  return api.post("/users/logout",undefined)
+}
+
+const uploadIdCardImageFront = (data,token)=>{
+  index.setToken(token)
+  return api.post("/profile/idCardImage/front",data)
+}
+
+const uploadIdCardImageBack = (data,token) =>{
+  index.setToken(token)
+  return api.post("/profile/idCardImage/back", data)
 }
 
 export default {
@@ -40,5 +49,7 @@ export default {
     getProfile,
     editProfile,
     updloadProfile,
-    logout
+    logout,
+    uploadIdCardImageFront,
+    uploadIdCardImageBack
 }

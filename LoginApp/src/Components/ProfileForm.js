@@ -6,15 +6,13 @@ import { SingleDatePicker } from "react-dates";
 import moment from "moment";
 import { Buffer } from "buffer";
 import Resizer from "react-image-file-resizer";
+import { type } from "os";
 
 export default class ProfileForm extends React.Component {
   constructor(props) {
     super(props);
-    // const yourname = this.props.myProfile.yourname;
-    //  const idCard = this.props.myProfile.idCard
-    //  const address = this.props.myProfile.address
-    //  const date = this.props.myProfile.date
     console.log("profile form", this.props.myProfile);
+
     this.state = {
       yourname: this.props.myProfile.yourname
         ? this.props.myProfile.yourname
@@ -26,7 +24,13 @@ export default class ProfileForm extends React.Component {
         : moment(),
       focused: false,
       image: this.props.myProfile.image ? this.props.myProfile.image : null,
-      base64ImageString: "",
+      frontIdCard: this.props.myProfile.frontIdCard
+        ? this.props.myProfile.frontIdCard
+        : null,
+      backIdCard: this.props.myProfile.backIdCard
+        ? this.props.myProfile.backIdCard
+        : null,
+      base64ImageString: [],
     };
 
     this.onLogout = this.onLogout.bind(this);
@@ -51,10 +55,19 @@ export default class ProfileForm extends React.Component {
 
     try {
       await this.props.onEditProfile(result, this.props.myProfile.token);
-
-      if (this.state.image.type !== "Buffer") {
+      
+      if (typeof this.state.image != "Buffer") {
         await this.props.onUploadImage(this.state.image);
       }
+      
+      if (typeof this.state.frontIdCard != "Buffer") {
+        await this.props.onUploadIdCardImageFront(this.state.frontIdCard)
+      }
+
+      if(typeof this.state.backIdCard != "Buffer"){
+        await this.props.onUploadIdCardImageBack(this.state.backIdCard)
+      }
+
     } catch (error) {
       console.log(error.message);
     }
@@ -69,14 +82,21 @@ export default class ProfileForm extends React.Component {
     //   String.fromCharCode(...new Uint8Array(this.state.image.data))
     // );
 
-    let buff = new Buffer(this.state.image);
-    let base64data = buff.toString("base64");
+    let buff1 = new Buffer(this.state.image);
+    let buff2 = new Buffer(this.state.frontIdCard);
+    let buff3 = new Buffer(this.state.backIdCard);
+    let base64data1 = buff1.toString("base64");
+    let base64data2 = buff2.toString("base64");
+    let base64data3 = buff3.toString("base64");
+    const base64dataList = [];
+    base64dataList.push(base64data1, base64data2, base64data3);
     this.setState({
-      base64ImageString: base64data,
+      base64ImageString: base64dataList,
     });
   }
 
   render() {
+    const listImage = [];
     return (
       <div className="row d-flex justify-content-center">
         <div className="hold-transition text-center">
@@ -147,7 +167,7 @@ export default class ProfileForm extends React.Component {
                     required={true}
                   />
                 </div>
-
+                
                 <div className="form-group">
                   <label className="form-label card-title">Your Image</label>
                   <div className="input-group">
@@ -159,6 +179,7 @@ export default class ProfileForm extends React.Component {
                         onChange={(e) => {
                           let image = document.getElementById("output");
                           image.src = URL.createObjectURL(e.target.files[0]);
+                          console.log(e.target.files[0]);
                           this.setState({
                             image: e.target.files[0],
                           });
@@ -172,16 +193,76 @@ export default class ProfileForm extends React.Component {
                     id="output"
                     width="250"
                     height="250"
-                    src={`data:png;base64,${this.state.base64ImageString}`}
+                    src={`data:png;base64,${this.state.base64ImageString[0]}`}
                   />
                 </div>
               </div>
 
-            
-                <button type="submit" className="btn btn-lg btn-primary">
-                  Lưu thành công
-                </button>
-              
+              <div className="form-group">
+                <label className="form-label card-title">
+                  Your Front Id Card{" "}
+                </label>
+                <div className="input-group">
+                  <div className="custom-file">
+                    <input
+                      className="form-control"
+                      type="file"
+                      name="image"
+                      onChange={(e) => {
+                        let image = document.getElementById("front-id-card");
+                        image.src = URL.createObjectURL(e.target.files[0]);
+                        console.log(e.target.files[0]);
+                        this.setState({
+                          frontIdCard: e.target.files[0],
+                        });
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div>
+                <img
+                  id="front-id-card"
+                  width="250"
+                  height="250"
+                  src={`data:png;base64,${this.state.base64ImageString[1]}`}
+                />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label card-title">
+                  Your Back Id Card
+                </label>
+                <div className="input-group">
+                  <div className="custom-file">
+                    <input
+                      className="form-control"
+                      type="file"
+                      name="image"
+                      onChange={(e) => {
+                        let image = document.getElementById("back-id-card");
+                        image.src = URL.createObjectURL(e.target.files[0]);
+                        console.log(e.target.files[0]);
+                        this.setState({
+                          backIdCard:e.target.files[0],
+                        });
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div>
+                <img
+                  id="back-id-card"
+                  width="250"
+                  height="250"
+                  src={`data:png;base64,${this.state.base64ImageString[2]}`}
+                />
+              </div>
+
+              <button type="submit" className="btn btn-lg btn-primary">
+                Lưu thành công
+              </button>
             </form>
             <div className="card-footer">
               <button className="btn btn-danger" onClick={this.onLogout}>

@@ -20,8 +20,8 @@ export default async (state = defaultProfile, action) => {
         const respones = await user.login(action.result); // axios trả về 1 Object
         console.log("response of login action", respones);
         await auth.setToken("token", respones.data.token);
-        var getToken = auth.getToken("token")
-        console.log('token of user', getToken)
+        var getToken = auth.getToken("token");
+        console.log("token of user", getToken);
         result = {
           ...respones.data,
           token: getToken,
@@ -91,7 +91,7 @@ export default async (state = defaultProfile, action) => {
       const token = auth.getToken("token");
       try {
         const response = await user.getProfile(token);
-        console.log("response of action", response);
+        console.log("response of get info action", response);
         result = {
           ...response.data,
           token: response.data.token,
@@ -105,15 +105,56 @@ export default async (state = defaultProfile, action) => {
 
     case "LOGOUT": {
       try {
-        const token = auth.getToken("token")
-        console.log("token logout", token)
-        //await user.logout(token);
+        const token = auth.getToken("token");
+        console.log("token logout", token);
         auth.clearToken("token");
+        await user.logout(token);
         return {};
       } catch (error) {
         console.log(error.message);
       }
       break;
     }
+
+    case "UPLOAD_IMAGE_Id_Card_Front": {
+      let result = {}
+      const token = auth.getToken("token")
+      try {
+        const data = new FormData()
+        data.append("imageIdCardFront", action.result)
+
+        const respones = await user.uploadIdCardImageFront(data,token)
+        console.log("response of upload idCard Front", respones)
+        result = {
+          ...respones.data,
+          token: respones.data.token,
+        };
+
+      } catch (error) {
+        console.log(error.message)
+      }
+      return result
+    }
+
+    case "UPLOAD_IMAGE_Id_Card_Back": {
+      let result = {}
+      const token = auth.getToken("token")
+      try {
+        const data = new FormData()
+        data.append("imageIdCardBack",action.result)
+
+        const response = await user.uploadIdCardImageBack(data,token)
+        console.log("Reponese of upload idCard Back", response)
+
+        result ={
+          ...response.data,
+          token: response.data.token
+        }
+      } catch (error) {
+        console.log(error.message)
+      }
+      return result
+    }
+
   }
 };

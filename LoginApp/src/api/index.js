@@ -35,23 +35,17 @@ const clearToken = () => {
 
 const api = {
   get: (url, params = {}) => {
-    return axios.get(getURL(url),  {
+    return axios.get(getURL(url), {
       params,
       headers: HEADERS,
     });
   },
 
   post: (url, params) => {
-    if(params){
-      return axios.post(getURL(url), params, {
-        headers: HEADERS,
-      });
-    }else{
-      return axios.post(getURL(url),{
-        headers: HEADERS
-      })
-    }
-    
+    console.log("1");
+    return axios.post(getURL(url), params, {
+      headers: HEADERS,
+    });
   },
 
   patch: (url, params) => {

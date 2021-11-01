@@ -5,7 +5,10 @@ import {
   EDIT_PROFILE,
   GET_INFO,
   LOGOUT,
+  UPLOAD_ID_CARD_IMAGE,
   UPLOAD_IMAGE,
+  UPLOAD_IMAGE_Id_Card_Back,
+  UPLOAD_IMAGE_Id_Card_Front,
 } from "../actions/profileAction";
 import auth from "../api/auth";
 
@@ -21,6 +24,8 @@ class EditProfile extends React.Component {
     this.onEditProfile = this.onEditProfile.bind(this);
     this.onUploadImage = this.onUploadImage.bind(this);
     this.onLogout = this.onLogout.bind(this);
+    this.onUploadIdCardImageFront= this.onUploadIdCardImageFront.bind(this)
+    this.onUploadIdCardImageBack = this.onUploadIdCardImageBack.bind(this)
   }
 
   async getMyProfile() {
@@ -56,13 +61,19 @@ class EditProfile extends React.Component {
     this.props.history.push("/");
   }
 
+ onUploadIdCardImageFront(result){
+  this.props.uploadIdCardFront(result)
+  this.props.history.push("/profile")
+ }
+
+ onUploadIdCardImageBack(result){
+   this.props.uploadIdCardBack(result)
+   this.props.history.push("/profile")
+ }
+
   componentDidMount() {
     this.getMyProfile();
   }
-
-  // componentDidUpdate(){
-  //   this.getMyProfile();
-  // }
 
   render() {
     const { isGet } = this.state;
@@ -74,6 +85,8 @@ class EditProfile extends React.Component {
             onEditProfile={this.onEditProfile}
             onUploadImage={this.onUploadImage}
             onLogout={this.onLogout}
+            onUploadIdCardImageFront= {this.onUploadIdCardImageFront}
+            onUploadIdCardImageBack= {this.onUploadIdCardImageBack}
           />
         </div>
       );
@@ -95,6 +108,8 @@ const mapDispatchToRC = (dispatch) => {
     editProfile: (result) => dispatch(EDIT_PROFILE(result)),
     uploadImage: (result) => dispatch(UPLOAD_IMAGE(result)),
     logOut: () => dispatch(LOGOUT()),
+    uploadIdCardFront: (result) => dispatch(UPLOAD_IMAGE_Id_Card_Front(result)),
+    uploadIdCardBack: (result) => dispatch(UPLOAD_IMAGE_Id_Card_Back(result))
   };
 };
 

@@ -40,4 +40,18 @@ const LOGOUT = () =>{
     }
 }
 
-export {LOGIN, REGISTER, EDIT_PROFILE, UPLOAD_IMAGE, GET_INFO, LOGOUT}
+const UPLOAD_IMAGE_Id_Card_Front = (result) =>{
+    return {
+        type: "UPLOAD_IMAGE_Id_Card_Front",
+        result,
+    }
+}
+
+const UPLOAD_IMAGE_Id_Card_Back = (result) =>{
+    return {
+        type: "UPLOAD_IMAGE_Id_Card_Back",
+        result,
+    }
+}
+
+export {LOGIN, REGISTER, EDIT_PROFILE, UPLOAD_IMAGE, GET_INFO, LOGOUT, UPLOAD_IMAGE_Id_Card_Front, UPLOAD_IMAGE_Id_Card_Back}

@@ -94,9 +94,8 @@ router.post(
   upload.single("image"),
   async (req, res) => {
     try {
-      console.log(req.file)
-      const imageSharp = await sharp(req.file.buffer)
-        .toBuffer();
+      console.log(req.file);
+      const imageSharp = await sharp(req.file.buffer).toBuffer();
       await req.user.populate("myProfile");
 
       const myProfile = await Profile.findById(req.user.myProfile[0]._id);
@@ -110,22 +109,52 @@ router.post(
   }
 );
 
-router.post("/profile/idCardImage",auth, upload.single("imageIdCard"),async(req,res)=>{
-  try {
-    
-  } catch (error) {
-    console.log(error)
-    res.status(400).send({error:error.message})
-  }
-})
+router.post(
+  "/profile/idCardImage/front",
+  auth,
+  upload.single("imageIdCardFront"),
+  async (req, res) => {
+    try {
+      console.log(req.file); // req.file là attri cung cấp bởi multer
+      const imageSharp = await sharp(req.file.buffer).toBuffer();
 
-router.get("/anything",(req,res)=>{
-  try {
-    res.send("Hello World")
-  } catch (error) {
-    
-  }
-})
+      await req.user.populate("myProfile");
 
+      const myProfile = await Profile.findById(req.user.myProfile[0]._id);
+      myProfile.frontIdCard = imageSharp;
+      await myProfile.save();
+      res.status(200).send(myProfile);
+    } catch (error) {
+      console.log(error);
+      res.status(400).send({ error: error.message });
+    }
+  }
+);
+
+router.post(
+  "/profile/idCardImage/back",
+  auth,
+  upload.single("imageIdCardBack"),
+  async (req, res) => {
+    try {
+      console.log(req.file); // req.file là attri cung cấp bởi multer
+      const imageSharp = await sharp(req.file.buffer).toBuffer();
+      await req.user.populate("myProfile");
+      const myProfile = await Profile.findById(req.user.myProfile[0]._id);
+      myProfile.backIdCard = imageSharp;
+      await myProfile.save();
+      res.status(200).send(myProfile);
+    } catch (error) {
+      console.log(error);
+      res.status(400).send({ error: error.message });
+    }
+  }
+);
+
+router.get("/anything", (req, res) => {
+  try {
+    res.send("Hello World");
+  } catch (error) {}
+});
 
 module.exports = router;
