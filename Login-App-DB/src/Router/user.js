@@ -48,6 +48,15 @@ router.post("/users/logout", auth, async(req,res)=>{
   }
 })
 
+router.get("/users/me", auth, async(req,res)=>{
+  try {
+    res.status(200).send(req.user)
+  } catch (error) {
+    console.log(error)
+    res.status(400).send({error:error.message})
+  }
+})
+
 
 
 

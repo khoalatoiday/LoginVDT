@@ -1,6 +1,4 @@
-import axios from "axios";
-import index from "../api/index";
-import api from "../api/index";
+
 import user from "../api/user";
 import auth from "../api/auth";
 const defaultProfile = {
@@ -156,5 +154,8 @@ export default async (state = defaultProfile, action) => {
       return result
     }
 
+    default:{
+      return state
+    }
   }
 };

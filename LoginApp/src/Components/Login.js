@@ -12,9 +12,9 @@ class Login extends React.Component {
 
   async onSubmit(result) {
     var rs = await this.props.login(result);
-    console.log('shOw rs', rs)
+    console.log('show rs', rs)
     setTimeout(()=>{
-      this.props.history.push("/profile")
+      this.props.history.push("/dashboard")
     },1000)
   };
 
@@ -23,7 +23,7 @@ class Login extends React.Component {
     const token = auth.getToken("token")
     if(token){
       console.log("yes")
-      this.props.history.push("/profile")
+      this.props.history.push("/dashboard")
     }else{
       console.log("no")
       this.props.history.push("/")

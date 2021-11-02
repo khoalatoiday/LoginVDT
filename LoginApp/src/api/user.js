@@ -42,6 +42,15 @@ const uploadIdCardImageBack = (data,token) =>{
   return api.post("/profile/idCardImage/back", data)
 }
 
+const getAllMenu = () =>{
+  return api.get("/menu/all");
+}
+
+const getUserInfo = (token)=>{
+  index.setToken(token)
+  return api.get("/users/me")
+}
+
 export default {
     ...resApi,
     login,
@@ -51,5 +60,7 @@ export default {
     updloadProfile,
     logout,
     uploadIdCardImageFront,
-    uploadIdCardImageBack
+    uploadIdCardImageBack,
+    getAllMenu,
+    getUserInfo
 }

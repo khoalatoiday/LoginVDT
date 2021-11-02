@@ -2,6 +2,7 @@ const express = require("express");
 require("./db/mongoose");
 const userRouter = require("./Router/user");
 const profileRouter = require("./Router/profile");
+const menuRouter = require("./Router/menu")
 const cors = require("cors");
 const app = express();
 
@@ -33,5 +34,6 @@ app.use(
 
 app.use(userRouter);
 app.use(profileRouter);
+app.use(menuRouter)
 
 module.exports = app;

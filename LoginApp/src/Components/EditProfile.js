@@ -1,6 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
 import ProfileForm from "./ProfileForm";
+import SideBar from "./SideBar";
+import NavBar from "./NavBar";
 import {
   EDIT_PROFILE,
   GET_INFO,
@@ -23,14 +25,14 @@ class EditProfile extends React.Component {
     this.getMyProfile = this.getMyProfile.bind(this);
     this.onEditProfile = this.onEditProfile.bind(this);
     this.onUploadImage = this.onUploadImage.bind(this);
-    this.onLogout = this.onLogout.bind(this);
-    this.onUploadIdCardImageFront= this.onUploadIdCardImageFront.bind(this)
-    this.onUploadIdCardImageBack = this.onUploadIdCardImageBack.bind(this)
+    this.onUploadIdCardImageFront = this.onUploadIdCardImageFront.bind(this);
+    this.onUploadIdCardImageBack = this.onUploadIdCardImageBack.bind(this);
+    this.onPushOtherComponent = this.onPushOtherComponent.bind(this);
   }
 
   async getMyProfile() {
     const token = auth.getToken("token");
-    console.log('show profile', token)
+    console.log("show profile", token);
 
     if (token) {
       try {
@@ -38,7 +40,6 @@ class EditProfile extends React.Component {
         const result = await this.props.profile;
         console.log("result", result);
         await this.setState({ myProfile: { ...result }, isGet: true });
-        console.log("state 2", this.state.myProfile);
       } catch (error) {
         console.log(error);
       }
@@ -55,24 +56,26 @@ class EditProfile extends React.Component {
     this.props.history.push("/profile");
   }
 
-  onLogout() {
-    this.props.logOut();
-    console.log(localStorage.getItem("token"));
-    this.props.history.push("/");
+  onUploadIdCardImageFront(result) {
+    this.props.uploadIdCardFront(result);
+    this.props.history.push("/profile");
   }
 
- onUploadIdCardImageFront(result){
-  this.props.uploadIdCardFront(result)
-  this.props.history.push("/profile")
- }
-
- onUploadIdCardImageBack(result){
-   this.props.uploadIdCardBack(result)
-   this.props.history.push("/profile")
- }
+  onUploadIdCardImageBack(result) {
+    this.props.uploadIdCardBack(result);
+    this.props.history.push("/profile");
+  }
 
   componentDidMount() {
     this.getMyProfile();
+  }
+
+  onPushOtherComponent(path) {
+    if (path === "/") {
+      this.props.history.push("/");
+    } else {
+      this.props.history.push(`/${path}`);
+    }
   }
 
   render() {
@@ -80,13 +83,14 @@ class EditProfile extends React.Component {
     if (isGet) {
       return (
         <div>
+          <NavBar onPushOtherComponent={this.onPushOtherComponent} />
+          <SideBar onPushOtherComponent={this.onPushOtherComponent} />
           <ProfileForm
             myProfile={this.state.myProfile}
             onEditProfile={this.onEditProfile}
             onUploadImage={this.onUploadImage}
-            onLogout={this.onLogout}
-            onUploadIdCardImageFront= {this.onUploadIdCardImageFront}
-            onUploadIdCardImageBack= {this.onUploadIdCardImageBack}
+            onUploadIdCardImageFront={this.onUploadIdCardImageFront}
+            onUploadIdCardImageBack={this.onUploadIdCardImageBack}
           />
         </div>
       );
@@ -107,9 +111,9 @@ const mapDispatchToRC = (dispatch) => {
     getInfo: (token) => dispatch(GET_INFO(token)),
     editProfile: (result) => dispatch(EDIT_PROFILE(result)),
     uploadImage: (result) => dispatch(UPLOAD_IMAGE(result)),
-    logOut: () => dispatch(LOGOUT()),
+
     uploadIdCardFront: (result) => dispatch(UPLOAD_IMAGE_Id_Card_Front(result)),
-    uploadIdCardBack: (result) => dispatch(UPLOAD_IMAGE_Id_Card_Back(result))
+    uploadIdCardBack: (result) => dispatch(UPLOAD_IMAGE_Id_Card_Back(result)),
   };
 };
 

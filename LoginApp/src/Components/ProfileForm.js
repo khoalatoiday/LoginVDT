@@ -5,8 +5,7 @@ import "react-dates/lib/css/_datepicker.css";
 import { SingleDatePicker } from "react-dates";
 import moment from "moment";
 import { Buffer } from "buffer";
-import Resizer from "react-image-file-resizer";
-import { type } from "os";
+
 
 export default class ProfileForm extends React.Component {
   constructor(props) {
@@ -33,7 +32,6 @@ export default class ProfileForm extends React.Component {
       base64ImageString: [],
     };
 
-    this.onLogout = this.onLogout.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
 
@@ -55,27 +53,24 @@ export default class ProfileForm extends React.Component {
 
     try {
       await this.props.onEditProfile(result, this.props.myProfile.token);
-      
+
       if (typeof this.state.image != "Buffer") {
         await this.props.onUploadImage(this.state.image);
       }
-      
+
       if (typeof this.state.frontIdCard != "Buffer") {
-        await this.props.onUploadIdCardImageFront(this.state.frontIdCard)
+        await this.props.onUploadIdCardImageFront(this.state.frontIdCard);
       }
 
-      if(typeof this.state.backIdCard != "Buffer"){
-        await this.props.onUploadIdCardImageBack(this.state.backIdCard)
+      if (typeof this.state.backIdCard != "Buffer") {
+        await this.props.onUploadIdCardImageBack(this.state.backIdCard);
       }
-
     } catch (error) {
       console.log(error.message);
     }
   };
 
-  onLogout() {
-    this.props.onLogout();
-  }
+ 
 
   componentDidMount() {
     // const base64String = btoa(
@@ -94,82 +89,123 @@ export default class ProfileForm extends React.Component {
       base64ImageString: base64dataList,
     });
   }
-
+// 
   render() {
     const listImage = [];
     return (
-      <div className="row d-flex justify-content-center">
-        <div className="hold-transition text-center">
-          <div className="card card-primary" style={{ minWidth: 600 }}>
-            <div className="card-header">
-              <h3 className="card-title">Thay đổi profile</h3>
-            </div>
+      <div>
+        <div className="row d-flex justify-content-center">
+          <div className="hold-transition text-center">
+            <div className="card card-primary" style={{ minWidth: 600 }}>
+              <div className="card-header">
+                <h3 className="card-title">Thay đổi profile</h3>
+              </div>
 
-            <form
-              onSubmit={this.onSubmit}
-              encType="multipart/form-data"
-              method="post"
-            >
-              <div className="card-body">
-                <div className="form-group">
-                  <label className="form-label card-title">Your Name</label>
+              <form
+                onSubmit={this.onSubmit}
+                encType="multipart/form-data"
+                method="post"
+              >
+                <div className="card-body">
+                  <div className="form-group">
+                    <label className="form-label card-title">Your Name</label>
 
-                  <input
-                    className="form-control"
-                    type="text"
-                    placeholder="yourname"
-                    name="yourname"
-                    onChange={(e) =>
-                      this.setState({ yourname: e.target.value })
-                    }
-                    value={this.state.yourname}
-                    required={true}
-                  />
-                </div>
-                <div className="form-group">
-                  <label className="form-label card-title">Birthday</label>
+                    <input
+                      className="form-control"
+                      type="text"
+                      placeholder="yourname"
+                      name="yourname"
+                      onChange={(e) =>
+                        this.setState({ yourname: e.target.value })
+                      }
+                      value={this.state.yourname}
+                      required={true}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label card-title">Birthday</label>
 
-                  <SingleDatePicker
-                    date={this.state.date}
-                    onDateChange={(date) => this.setState({ date })}
-                    focused={this.state.focused}
-                    onFocusChange={({ focused }) => this.setState({ focused })}
-                    id="your_unique_id"
-                    numberOfMonths={1}
-                    isOutsideRange={() => false}
-                  />
+                    <SingleDatePicker
+                      date={this.state.date}
+                      onDateChange={(date) => this.setState({ date })}
+                      focused={this.state.focused}
+                      onFocusChange={({ focused }) =>
+                        this.setState({ focused })
+                      }
+                      id="your_unique_id"
+                      numberOfMonths={1}
+                      isOutsideRange={() => false}
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label card-title">
+                      Your Identify Card
+                    </label>
+                    <input
+                      className="form-control"
+                      type="text"
+                      name="idCard"
+                      placeholder="idCard"
+                      onChange={(e) =>
+                        this.setState({ idCard: e.target.value })
+                      }
+                      value={this.state.idCard}
+                      required={true}
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label card-title">
+                      Your Address
+                    </label>
+                    <input
+                      className="form-control"
+                      type="text"
+                      name="address"
+                      placeholder="address"
+                      onChange={(e) =>
+                        this.setState({ address: e.target.value })
+                      }
+                      value={this.state.address}
+                      required={true}
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label card-title">Your Image</label>
+                    <div className="input-group">
+                      <div className="custom-file">
+                        <input
+                          className="form-control"
+                          type="file"
+                          name="image"
+                          onChange={(e) => {
+                            let image = document.getElementById("output");
+                            image.src = URL.createObjectURL(e.target.files[0]);
+                            console.log(e.target.files[0]);
+                            this.setState({
+                              image: e.target.files[0],
+                            });
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <img
+                      id="output"
+                      width="250"
+                      height="250"
+                      src={`data:png;base64,${this.state.base64ImageString[0]}`}
+                    />
+                  </div>
                 </div>
 
                 <div className="form-group">
                   <label className="form-label card-title">
-                    Your Identify Card
+                    Your Front Id Card{" "}
                   </label>
-                  <input
-                    className="form-control"
-                    type="text"
-                    name="idCard"
-                    placeholder="idCard"
-                    onChange={(e) => this.setState({ idCard: e.target.value })}
-                    value={this.state.idCard}
-                    required={true}
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label className="form-label card-title">Your Address</label>
-                  <input
-                    className="form-control"
-                    type="text"
-                    name="address"
-                    placeholder="address"
-                    onChange={(e) => this.setState({ address: e.target.value })}
-                    value={this.state.address}
-                    required={true}
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label className="form-label card-title">Your Image</label>
                   <div className="input-group">
                     <div className="custom-file">
                       <input
@@ -177,11 +213,11 @@ export default class ProfileForm extends React.Component {
                         type="file"
                         name="image"
                         onChange={(e) => {
-                          let image = document.getElementById("output");
+                          let image = document.getElementById("front-id-card");
                           image.src = URL.createObjectURL(e.target.files[0]);
                           console.log(e.target.files[0]);
                           this.setState({
-                            image: e.target.files[0],
+                            frontIdCard: e.target.files[0],
                           });
                         }}
                       />
@@ -190,84 +226,51 @@ export default class ProfileForm extends React.Component {
                 </div>
                 <div>
                   <img
-                    id="output"
+                    id="front-id-card"
                     width="250"
                     height="250"
-                    src={`data:png;base64,${this.state.base64ImageString[0]}`}
+                    src={`data:png;base64,${this.state.base64ImageString[1]}`}
                   />
                 </div>
-              </div>
 
-              <div className="form-group">
-                <label className="form-label card-title">
-                  Your Front Id Card{" "}
-                </label>
-                <div className="input-group">
-                  <div className="custom-file">
-                    <input
-                      className="form-control"
-                      type="file"
-                      name="image"
-                      onChange={(e) => {
-                        let image = document.getElementById("front-id-card");
-                        image.src = URL.createObjectURL(e.target.files[0]);
-                        console.log(e.target.files[0]);
-                        this.setState({
-                          frontIdCard: e.target.files[0],
-                        });
-                      }}
-                    />
+                <div className="form-group">
+                  <label className="form-label card-title">
+                    Your Back Id Card
+                  </label>
+                  <div className="input-group">
+                    <div className="custom-file">
+                      <input
+                        className="form-control"
+                        type="file"
+                        name="image"
+                        onChange={(e) => {
+                          let image = document.getElementById("back-id-card");
+                          image.src = URL.createObjectURL(e.target.files[0]);
+                          console.log(e.target.files[0]);
+                          this.setState({
+                            backIdCard: e.target.files[0],
+                          });
+                        }}
+                      />
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div>
-                <img
-                  id="front-id-card"
-                  width="250"
-                  height="250"
-                  src={`data:png;base64,${this.state.base64ImageString[1]}`}
-                />
-              </div>
-
-              <div className="form-group">
-                <label className="form-label card-title">
-                  Your Back Id Card
-                </label>
-                <div className="input-group">
-                  <div className="custom-file">
-                    <input
-                      className="form-control"
-                      type="file"
-                      name="image"
-                      onChange={(e) => {
-                        let image = document.getElementById("back-id-card");
-                        image.src = URL.createObjectURL(e.target.files[0]);
-                        console.log(e.target.files[0]);
-                        this.setState({
-                          backIdCard:e.target.files[0],
-                        });
-                      }}
-                    />
-                  </div>
+                <div>
+                  <img
+                    id="back-id-card"
+                    width="250"
+                    height="250"
+                    src={`data:png;base64,${this.state.base64ImageString[2]}`}
+                  />
                 </div>
-              </div>
-              <div>
-                <img
-                  id="back-id-card"
-                  width="250"
-                  height="250"
-                  src={`data:png;base64,${this.state.base64ImageString[2]}`}
-                />
-              </div>
 
-              <button type="submit" className="btn btn-lg btn-primary">
-                Lưu thành công
-              </button>
-            </form>
-            <div className="card-footer">
-              <button className="btn btn-danger" onClick={this.onLogout}>
-                Đăng xuất
-              </button>
+                <button type="submit" className="btn btn-lg btn-primary">
+                  Lưu thành công
+                </button>
+              </form>
+              <div className="card-footer">
+               
+              </div>
             </div>
           </div>
         </div>

@@ -13,13 +13,15 @@ class Register extends React.Component {
       phoneNumber: "",
       email: "",
     };
-    this.onSubmit = this.onSubmit.bind(this)
+    this.onSubmit = this.onSubmit.bind(this);
   }
 
-  onSubmit(result) {
-    this.props.register(result);
-   // this.props.history.push("/profile");
-  };
+  async onSubmit(result) {
+    await this.props.register(result);
+    setTimeout(() => {
+      this.props.history.push("/dashboard");
+    }, 1000);
+  }
 
   render() {
     return (
