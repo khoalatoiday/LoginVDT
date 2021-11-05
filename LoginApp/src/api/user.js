@@ -42,8 +42,9 @@ const uploadIdCardImageBack = (data,token) =>{
   return api.post("/profile/idCardImage/back", data)
 }
 
-const getAllMenu = () =>{
-  return api.get("/menu/all");
+const getAllMenu = (params) =>{
+  console.log("params", params)
+  return api.get("/menu/all", params);
 }
 
 const getUserInfo = (token)=>{

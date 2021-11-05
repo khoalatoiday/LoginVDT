@@ -34,9 +34,18 @@ const userSchema = new mongoose.Schema({
   },
 
   phoneNumber: {
-    type: Number,
+    type: String,
     required: true,
     trim: true,
+    minlength: 10,
+    maxlength: 12,
+    match: /^(\()?\d{3}(\))?(-|\s)?\d{3}(-|\s)\d{4}$/
+  },
+
+  role:{
+    type: String,
+    required: true,
+    trim: true
   },
 
   tokens: [
@@ -48,6 +57,7 @@ const userSchema = new mongoose.Schema({
     },
   ],
 });
+
 
 userSchema.virtual("myProfile", {
   ref: "Profile",
@@ -65,6 +75,8 @@ userSchema.methods.generateAuthToken = async function () {
   await user.save()
   return userToken;
 };
+
+
 
 
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
-import { GET_USER } from "../actions/userAction";
-import NavBarFrom from "./NavBarForm";
+import { GET_USER } from "../redux/actions/userAction";
+import NavBarFrom from "../layouts/NavBarForm";
 export class NavBar extends React.Component {
   constructor(props) {
     super(props);
@@ -30,11 +30,12 @@ export class NavBar extends React.Component {
 
   render() {
     const {isLoaded} = this.state
+  
     if(isLoaded){
         return (
-            <div>
+            
               <NavBarFrom userInfo={this.state.userInfo}/>
-            </div>
+            
           );
     }else{
         return (<div>Loading</div>)

@@ -1,8 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
-import { REGISTER } from "../actions/profileAction";
+import { REGISTER } from "../redux/actions/profileAction";
 
-import RegisterForm from "./RegisterForm";
+import RegisterForm from "../layouts/RegisterForm";
 
 class Register extends React.Component {
   constructor(props) {

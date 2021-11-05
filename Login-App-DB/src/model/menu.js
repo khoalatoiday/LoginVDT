@@ -11,6 +11,11 @@ const menuSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
+    role:{
+        type: String,
+        required:true,
+        trim: true,
+    }
 })
 
 const Menu = mongoose.model("Menu", menuSchema)

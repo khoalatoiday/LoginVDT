@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import ProfileForm from "./ProfileForm";
+import ProfileForm from "../layouts/ProfileForm";
 import SideBar from "./SideBar";
 import NavBar from "./NavBar";
 import {
@@ -11,7 +11,7 @@ import {
   UPLOAD_IMAGE,
   UPLOAD_IMAGE_Id_Card_Back,
   UPLOAD_IMAGE_Id_Card_Front,
-} from "../actions/profileAction";
+} from "../redux/actions/profileAction";
 import auth from "../api/auth";
 
 class EditProfile extends React.Component {
@@ -83,8 +83,8 @@ class EditProfile extends React.Component {
     if (isGet) {
       return (
         <div>
-          <NavBar onPushOtherComponent={this.onPushOtherComponent} />
           <SideBar onPushOtherComponent={this.onPushOtherComponent} />
+          <NavBar onPushOtherComponent={this.onPushOtherComponent} />
           <ProfileForm
             myProfile={this.state.myProfile}
             onEditProfile={this.onEditProfile}
@@ -118,3 +118,7 @@ const mapDispatchToRC = (dispatch) => {
 };
 
 export default connect(mapsPropsToRC, mapDispatchToRC)(EditProfile);
+
+/*
+  
+*/

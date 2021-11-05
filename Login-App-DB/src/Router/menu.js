@@ -8,6 +8,7 @@ router.post("/menu/create", async (req, res) => {
     const menu = new Menu({
       ...req.body,
     });
+
     await menu.save();
     res.status(200).send(menu);
   } catch (error) {
@@ -18,7 +19,8 @@ router.post("/menu/create", async (req, res) => {
 
 router.get("/menu/all", async(req,res)=>{
     try {
-        const menus = await Menu.find()
+      const role = req.body.role
+        const menus = await Menu.find({role})
         
         res.status(200).send(menus)
 

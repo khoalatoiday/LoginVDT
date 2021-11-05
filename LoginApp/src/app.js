@@ -21,19 +21,18 @@ với các feature trong thư viện ( dùng cho ứng dụng hiện ra content 
 import React from "react";
 import ReactDOM from "react-dom";
 import "normalize.css/normalize.css"; // giúp tất cả browser và OS có chung style của app
-import "./style/style.scss";
 import AppRouters from "./Routers/AppRouters";
 import { Provider } from "react-redux";
-import {
-  LOGIN,
-  REGISTER,
-  EDIT_PROFILE,
-  UPLOAD_IMAGE,
-} from "./actions/profileAction";
-import configureStore from "./store/configureStore";
+import configureStore from "./redux/store/configureStore";
+import "../src/assets/scss/style.scss"
 
-// require("babel-core/register");
-// require("babel-polyfill");
+// import '@popperjs/core';
+// import 'bootstrap';
+// import "perfect-scrollbar"
+// import "smooth-scrollbar"
+// import "chart.js"
+
+
 
 const store = configureStore();
 
@@ -46,5 +45,6 @@ const jsx = (
     <AppRouters />
   </Provider>
 );
+
 
 ReactDOM.render(jsx, document.getElementById("app-id"));

@@ -4,59 +4,67 @@
   tự render của chúng
 */
 const path = require("path");
-console.log(path.join(__dirname, "public"));
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-module.exports = {
-  entry: ["babel-polyfill", "./src/app.js"],
-  output: {
-    path: path.join(__dirname, "public"),
-    filename: "bundle.js",
-    publicPath: "/",
-  },
+console.log(path.join(__dirname, "public", "dist"));
+module.exports = (env) => {
+  const isProduction = env === "production";
 
-  plugins: [
-    new MiniCssExtractPlugin({
-      filename: "styles.css",
-    }),
-  ],
-
-  module: {
-    rules: [
-      {
-        loader: "babel-loader",
-        test: /\.js$/,
-        exclude: /node_modules/,
-      },
-      {
-        test: /\.s?css$/,
-
-        use: [
-          MiniCssExtractPlugin.loader,
-          {
-            loader: "css-loader",
-            options: {
-              sourceMap: true,
-            },
-          },
-          {
-            loader: "sass-loader",
-            options: {
-              sourceMap: true,
-            },
-          },
-        ],
-      },
-    ],
-  },
-
-  mode: "development",
-
-  devtool: "eval-cheap-module-source-map",
-
-  devServer: {
-    static: path.join(__dirname, "public"),
-    historyApiFallback: {
-      index: "/",
+  return {
+    entry: "/src/app.js",
+    output: {
+      path: path.join(__dirname, "public", "dist"),
+      filename: "bundle.js",
     },
-  },
+
+    plugins: [
+      new MiniCssExtractPlugin({
+        filename: "styles.css",
+      }),
+    ],
+    module: {
+      rules: [
+        {
+          loader: "babel-loader",
+          test: /\.js$/,
+          exclude: /node_modules/,
+        },
+        {
+          test: /\.s?css$/,
+
+          use: [
+            MiniCssExtractPlugin.loader,
+            {
+              loader: "css-loader",
+              options: {
+                sourceMap: true,
+              },
+            },
+            {
+              loader: "sass-loader",
+              options: {
+                sourceMap: true,
+              },
+            },
+          ],
+        },
+      ],
+    },
+
+    devtool: isProduction ? "source-map" : "inline-source-map",
+
+    devServer: {
+      static: [
+        {
+          directory: path.join(__dirname, "public"),
+        },
+      ],
+      devMiddleware: {
+        publicPath: "https://localhost:3000/dist/",
+      },
+      historyApiFallback: {
+        index: "/",
+      },
+    },
+    mode: isProduction ? "production" : "development",
+  };
 };

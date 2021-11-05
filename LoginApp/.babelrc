@@ -1,12 +1,11 @@
 // babel file config ~ phục vụ cho set up babel cho webpack
 {
     "presets": [
-        "@babel/preset-react",
+        ["@babel/preset-react",{"throwIfNamespace": false}],
         "@babel/preset-env"
-        
-        
     ],
-    "plugins": ["transform-class-properties"]
+    "plugins": [
+        "transform-class-properties",
+        "@babel/plugin-transform-runtime" // fix lỗi regenerator is not defined
+    ]
 }
-
-//"es2015", "stage-0"
